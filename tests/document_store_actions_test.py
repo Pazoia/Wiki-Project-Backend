@@ -5,9 +5,10 @@ from src.sqlite import SqliteDB
 from src.document_store_actions import DocumentStoreActions
 from src.database_data_handlers import DatabaseManager
 from src.exceptions import (
+  NoChangesDetected,
   NoDataInDatabase,
-  TitleNotFound,
-  NoDocumentCreatedAtTimestamp
+  NoDocumentCreatedAtTimestamp,
+  TitleNotFound
 )
 
 database_name = "test_db.db"
@@ -249,5 +250,22 @@ def test_post_new_document_revision_returns_no_title_exception(document_store_ac
   content = "document text content (revision 3)"
 
   with pytest.raises(TitleNotFound):
+    # Adding new revision to title
+    document_store_actions.post_new_document_revision(title, timestamp, content)
+
+@pytest.mark.usefixtures("setup_test_db_with_data")
+def test_post_new_document_revision_returns_no_changes_detected_exception(document_store_actions):
+  '''
+  Given a database with at least a title
+  When we call post_new_document_revision on it
+  AND the new content is the same as its latest revision
+  Then we expect it to return NoChangesDetected exception
+  '''
+
+  title = "document title B"
+  timestamp = "2023-03-22 14:20:00.00"
+  content = "document text content (revision 2)"
+
+  with pytest.raises(NoChangesDetected):
     # Adding new revision to title
     document_store_actions.post_new_document_revision(title, timestamp, content)

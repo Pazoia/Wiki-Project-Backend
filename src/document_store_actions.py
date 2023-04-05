@@ -132,4 +132,4 @@ class DocumentStoreActions:
       raise TitleNotFound(f"Title: '{title}' not found, please check the provided title is correct. Please note that the tile is case sensitive and it needs to match exactly the title stored in the database.")
     else:
       self.data_handler.save_data_to_db(title, timestamp, new_content)
-      return f"New document saved to {title}"
+      return f"New document saved to title: {title}"
