@@ -3,9 +3,10 @@ import sqlite3
 
 from src.database_data_handlers import DatabaseManager
 from src.exceptions import (
+  NoChangesDetected,
   NoDataInDatabase,
-  TitleNotFound,
-  NoDocumentCreatedAtTimestamp
+  NoDocumentCreatedAtTimestamp,
+  TitleNotFound
 )
 
 class DocumentStoreActions:
@@ -120,11 +121,15 @@ class DocumentStoreActions:
     conn.close()
     return latest_document_revision
   
-  def post_new_document_revision(self, title, timestamp, content):
+  def post_new_document_revision(self, title, timestamp, new_content):
 
     titles_list = self.get_titles()
+    old_content = self.get_latest_document_revision(title)
 
-    if title in titles_list:
-      self.data_handler.save_data_to_db(title, timestamp, content)
-    else:
+    if old_content[2] == new_content:
+      raise NoChangesDetected(f"No changes detected in new content for title: {title}")
+    if title not in titles_list:
       raise TitleNotFound(f"Title: '{title}' not found, please check the provided title is correct. Please note that the tile is case sensitive and it needs to match exactly the title stored in the database.")
+    else:
+      self.data_handler.save_data_to_db(title, timestamp, new_content)
+      return f"New document saved to {title}"

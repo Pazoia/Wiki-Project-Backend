@@ -1,4 +1,4 @@
-# Paulo Azoia - Wiki Project
+# Paulo Azoia - Wiki Project Backend
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@
 
 ## Client requirements
 
-> Wiki Coding Task
+> Wiki Project Backend
 
 We’d like you to create the backend for a wiki, like Wikipedia. With the following requirements:
 
@@ -67,8 +67,6 @@ POST /documents/<title>
 > ### Application notes
 
 - I choose to use SQLite3 for the database for this project. My reasoning to use SQLite3 was that it is a light weight database, and as this is a project that is not going to demand too much from the database or hold any sensitive data I believe SQLite3 is sufficient. It also makes reviewing and testing the tech test easier as the database gets created on initialising the flask server.
-
-- For this project I committed all my changes to the main branch, not pushing any changes to Github as per the tech test requirements, but if I was to use a Github repo, I would create branches for adding new features or working in the different parts of the product. These would then be approved and merged to the main/master branch.
 
 ---
 
@@ -156,10 +154,10 @@ $ python server.py
 http://127.0.0.1:8080/documents
 ```
 
-- [Returns all document revisions for a specified title](http://127.0.0.1:8080/documents/Mars)
+- [Returns all document revisions for a specified title](http://127.0.0.1:8080/documents/Earth)
 
 ```
-http://127.0.0.1:8080/documents/Mars
+http://127.0.0.1:8080/documents/Earth
 ```
 
 - [Returns the document for "Earth" that was created on "2023-03-22 14:20:00.00"](http://127.0.0.1:8080/documents/Earth/2023-03-22%2014:29:30.00)
@@ -256,6 +254,9 @@ curl -d '{"content": "added with curl"}' -H "Content-Type: application/json" -X 
 > To Do's
 
 > Done
+
+- ✅ Add edge case to `post_new_document_revision`
+  - If a user tries to add unchanged content return `NoChangesDetected` exception
 
 **_Implement JSON api endpoints:_**
 

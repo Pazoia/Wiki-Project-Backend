@@ -2,7 +2,7 @@ import os.path
 import json
 
 from datetime import datetime
-from flask import Flask, request, redirect
+from flask import Flask, request, jsonify, make_response
 
 from src.sqlite import SqliteDB
 from src.database_data_handlers import DatabaseManager
@@ -37,15 +37,21 @@ def manage_document_revisions_for_a_title(title):
 
     return documents_list
   elif request.method == "POST":
+    result = ""
     try:
       data = json.loads(request.data)
-      content = data["content"]
+      new_content = data["content"]
       timestamp = datetime.now()
-      document_store_actions.post_new_document_revision(title, timestamp, content)
+      result = document_store_actions.post_new_document_revision(title, timestamp, new_content)
     except Exception as error:
+      result = error
       print(error)
     finally:
-      return {"message": f"New document saved to {title}"}
+      res = make_response(
+        jsonify({"message": str(result)})
+      )
+      res.headers["Content-Type"] = "application/json"
+      return res
    
 @app.route("/documents/<title>/<timestamp>", methods=["GET"])
 def get_document_revision_at_a_given_timestamp(title, timestamp):
