@@ -66,7 +66,7 @@ POST /documents/<title>
 
 > ### Application notes
 
-- I choose to use SQLite3 for the database for this project. My reasoning to use SQLite3 was that it is a light weight database, and as this is a project that is not going to demand too much from the database or hold any sensitive data I believe SQLite3 is sufficient. It also makes reviewing and testing the tech test easier as the database gets created on initialising the flask server.
+- I choose to use SQLite3 for the database for this project. My reasoning to use SQLite3 was that it is a light weight database, and as this is a project that is not going to demand too much from the database or hold any sensitive data I believe SQLite3 is sufficient. It also makes creating the database easier as the database gets created on initialising the flask server.
 
 ---
 
@@ -253,7 +253,21 @@ curl -d '{"content": "added with curl"}' -H "Content-Type: application/json" -X 
 
 > To Do's
 
+- Create new function (`add_data_to_db`) that adds data to the database tables
+- Add tests for `add_data_to_db`
+- Refactor `post_new_document_revision` function to use newly created `add_data_to_db` function
+- Make sure all the test are still passing, tests should not need refactoring
+- Create new function `post_new_title` in `document_store_actions` file,
+  - this function should check for the title length
+  - this function should check that the title doesn't exist in db before adding it using the `add_data_to_db` function
+- Add tests for `post_new_title`
+- Delete `save_data_to_db` from `database_data_handlers` file
+- Move `save_dummy_data_to_db` function from `database_data_handlers` to `helper_functions` file
+- Delete `database_data_handlers` file as no longer required
+
 > Done
+
+**_Refactoring_**
 
 - ✅ Add edge case to `post_new_document_revision`
   - If a user tries to add unchanged content return `NoChangesDetected` exception
